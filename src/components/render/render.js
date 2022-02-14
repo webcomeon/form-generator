@@ -9,11 +9,18 @@ const componentChild = {}
 const slotsFiles = require.context('./slots', false, /\.js$/)
 const keys = slotsFiles.keys() || []
 keys.forEach(key => {
+  // tag ==>  el-button
+  // tag ==>  el-checkbox-group
+  // tag ==>  el-input
+  // tag ==>  el-radio-group
+  // tag ==>  el-select
+  // tag ==>  el-upload
   const tag = key.replace(/^\.\/(.*)\.\w+$/, '$1')
   const value = slotsFiles(key).default
   componentChild[tag] = value
 })
 
+// console.log('componentChild ==> ', componentChild)
 function vModel(dataObject, defaultValue) {
   dataObject.props.value = defaultValue
 
@@ -24,6 +31,7 @@ function vModel(dataObject, defaultValue) {
 
 function mountSlotFiles(h, confClone, children) {
   const childObjs = componentChild[confClone.__config__.tag]
+  // console.log('childObjs ==> ', childObjs)
   if (childObjs) {
     Object.keys(childObjs).forEach(key => {
       const childFunc = childObjs[key]
@@ -98,6 +106,7 @@ function makeDataObject() {
 
 export default {
   props: {
+    // 当前渲染元素的json配置
     conf: {
       type: Object,
       required: true

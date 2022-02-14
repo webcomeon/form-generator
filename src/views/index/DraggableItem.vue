@@ -19,6 +19,7 @@ const components = {
     ]
   }
 }
+
 const layouts = {
   colFormItem(h, currentItem, index, list) {
     const { activeItem } = this.$listeners
@@ -29,13 +30,25 @@ const layouts = {
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
     return (
-      <el-col span={config.span} class={className}
-        nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
-        <el-form-item label-width={labelWidth}
-          label={config.showLabel ? config.label : ''} required={config.required}>
-          <render key={config.renderKey} conf={currentItem} onInput={ event => {
-            this.$set(config, 'defaultValue', event)
-          }}>
+      <el-col
+        span={config.span}
+        class={className}
+        nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
+      >
+        <el-form-item
+          label-width={labelWidth}
+          label={config.showLabel ? config.label : ''}
+          required={config.required}
+        >
+          {/* 渲染对应组件 */}
+          <render
+            key={config.renderKey}
+            conf={currentItem}
+            onInput={ event => {
+              console.log('event ==> ', event)
+              this.$set(config, 'defaultValue', event)
+            }}
+          >
             {child}
           </render>
         </el-form-item>

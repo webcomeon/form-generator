@@ -44,7 +44,7 @@
 
     <div class="center-board">
       <div class="action-bar">
-        <el-button icon="el-icon-video-play" type="text" @click="run">
+        <!-- <el-button icon="el-icon-video-play" type="text" @click="run">
           运行
         </el-button>
         <el-button icon="el-icon-view" type="text" @click="showJson">
@@ -55,7 +55,7 @@
         </el-button>
         <el-button class="copy-btn-main" icon="el-icon-document-copy" type="text" @click="copy">
           复制代码
-        </el-button>
+        </el-button> -->
         <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty">
           清空
         </el-button>
@@ -68,7 +68,13 @@
             :disabled="formConf.disabled"
             :label-width="formConf.labelWidth + 'px'"
           >
-            <draggable class="drawing-board" :list="drawingList" :animation="340" group="componentsGroup">
+            {{ drawingList }}
+            <draggable
+              class="drawing-board"
+              :list="drawingList"
+              :animation="340"
+              group="componentsGroup"
+            >
               <draggable-item
                 v-for="(item, index) in drawingList"
                 :key="item.renderKey"
@@ -196,11 +202,11 @@ export default {
         {
           title: '选择型组件',
           list: selectComponents
-        },
-        {
-          title: '布局型组件',
-          list: layoutComponents
         }
+        // {
+        //   title: '布局型组件',
+        //   list: layoutComponents
+        // }
       ]
     }
   },
@@ -324,11 +330,13 @@ export default {
     },
     addComponent(item) {
       const clone = this.cloneComponent(item)
+      // __config__.dataType为dynamic时，要请求远端数据
       this.fetchData(clone)
       this.drawingList.push(clone)
       this.activeFormItem(clone)
     },
     cloneComponent(origin) {
+      // 深拷贝
       const clone = deepClone(origin)
       const config = clone.__config__
       config.span = this.formConf.span // 生成代码时，会根据span做精简判断
@@ -337,6 +345,7 @@ export default {
       tempActiveData = clone
       return tempActiveData
     },
+    // 加上id和key和一些属性
     createIdAndKey(item) {
       const config = item.__config__
       config.formId = ++this.idGlobal
